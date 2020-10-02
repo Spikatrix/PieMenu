@@ -412,7 +412,7 @@ public class PieWidget extends RadialGroup {
 
         /* Slight shadow below the PieMenu */
         sd.sector(vector2.x, vector2.y,
-                getCurrentRadius() * 1.09f, tmpOffset, bgRadian, Color.BLACK, Color.CLEAR);
+                getCurrentRadius() * 1.11f, tmpOffset, bgRadian, Color.BLACK, Color.CLEAR);
 
         /* Background image */
         if(style.background != null) {
