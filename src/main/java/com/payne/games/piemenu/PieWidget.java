@@ -408,6 +408,12 @@ public class PieWidget extends RadialGroup {
         final int SIZE  = getAmountOfChildren();
         float tmpRad    = bgRadian / SIZE;
 
+        vector2.set(getX(Align.center), getY(Align.center));
+
+        /* Slight shadow below the PieMenu */
+        sd.sector(vector2.x, vector2.y,
+                getCurrentRadius() * 1.09f, tmpOffset, bgRadian, Color.BLACK, Color.CLEAR);
+
         /* Background image */
         if(style.background != null) {
             Color bc = batch.getColor();
@@ -415,16 +421,16 @@ public class PieWidget extends RadialGroup {
             batch.setColor(bc.r, bc.g, bc.b, bc.a * globalAlphaMultiplier);
             if(style.background instanceof TransformDrawable) {
                 ((TransformDrawable)(style.background)).draw(batch,
-                        getX(Align.center) - getCurrentRadius(),
-                        getY(Align.center) - getCurrentRadius(),
+                        vector2.x - getCurrentRadius(),
+                        vector2.y - getCurrentRadius(),
                         getCurrentRadius(), getCurrentRadius(),
                         getCurrentDiameter(), getCurrentDiameter(),
                         getScaleX(), getScaleY(),
                         getRotation());
             } else {
                 style.background.draw(batch,
-                        getX(Align.center) - getCurrentRadius(),
-                        getY(Align.center) - getCurrentRadius(),
+                        vector2.x - getCurrentRadius(),
+                        vector2.y - getCurrentRadius(),
                         getCurrentDiameter(), getCurrentDiameter());
             }
             batch.setColor(bc.r, bc.g, bc.b, restoreAlpha);
@@ -433,12 +439,11 @@ public class PieWidget extends RadialGroup {
         /* Rest of background */
         if(style.backgroundColor != null) {
             propagateAlpha(sd, style.backgroundColor);
-            sd.sector(getX(Align.center), getY(Align.center),
-                    getCurrentRadius()-BUFFER, tmpOffset, bgRadian); // buffer to prevent bg from sticking out from below children
+            sd.sector(vector2.x, vector2.y,
+                    getCurrentRadius() - BUFFER, tmpOffset, bgRadian); // buffer to prevent bg from sticking out from below children
         }
 
         /* Children */
-        vector2.set(getX(Align.center), getY(Align.center));
         for(int i=0; i<SIZE; i++) {
             float tmp = tmpOffset + i*tmpRad;
             drawChild(vector2, i, tmp, tmpRad);
