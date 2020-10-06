@@ -31,14 +31,14 @@ public class Demonstration extends BaseScreen {
     private PieMenu middleMousePie;
     private PieMenu.PieMenuStyle midStyle1;
     private PieMenu.PieMenuStyle midStyle2;
-    private AnimatedPieWidget radial;
+    private AnimatedPieWidget widget;
 
     private float midStyle1InnerRadius = 24f / 80;
     private float midStyle2InnerRadius = 27f / 80;
     private Color backgroundColor = new Color(1, 1, 1, .2f);
     private int dragPieAmount = 0;
     private int permaPieAmount = 0;
-    private int radialAmount = 0;
+    private int widgetAmount = 0;
     private final int INITIAL_CHILDREN_AMOUNT = 5;
 
     public Demonstration(TestsMenu game) {
@@ -67,41 +67,41 @@ public class Demonstration extends BaseScreen {
         setUpButtonDragPieMenu(root);
         setUpRightMousePieMenu();
         setUpMiddleMousePieMenu();
-        setUpRadialWidget(root);
+        setUpPieWidget(root);
         setUpPermaPieMenu();
     }
 
 
-    private void setUpRadialWidget(Table root) {
+    private void setUpPieWidget(Table root) {
 
         /* Setting up and creating the widget. */
         PieWidgetStyle style = new PieWidgetStyle();
         style.backgroundColor = new Color(1, 1, 1, 1);
         style.sliceColor = new Color(.4f, .4f, .4f, 1);
         style.alternateSliceColor = new Color(.6f, 0, 0, 1);
-        radial = new AnimatedPieWidget(game.skin.getRegion("white"), style, 100, .5f, 0, 180);
+        widget = new AnimatedPieWidget(game.skin.getRegion("white"), style, 100, .5f, 0, 180);
 
         /* Populating the widget. */
         for (int i = 0; i < INITIAL_CHILDREN_AMOUNT; i++) {
-            Label label = new Label(Integer.toString(radialAmount++), game.skin);
-            radial.addActor(label);
+            Label label = new Label(Integer.toString(widgetAmount++), game.skin);
+            widget.addActor(label);
         }
 
         /* Setting up the demo-button. */
-        final TextButton textButton = new TextButton("Toggle Radial", game.skin);
+        final TextButton textButton = new TextButton("Toggle Widget", game.skin);
         textButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                radial.toggleVisibility(.9f);
-                radial.setPosition(textButton.getX(Align.center),
+                widget.toggleVisibility(.9f);
+                widget.setPosition(textButton.getX(Align.center),
                         textButton.getTop() + 15, Align.center);
             }
         });
         root.add(textButton).expand().bottom();
 
         /* Including the Widget in the Stage. */
-        game.stage.addActor(radial);
-        radial.setVisible(false);
+        game.stage.addActor(widget);
+        widget.setVisible(false);
     }
 
 
@@ -297,7 +297,7 @@ public class Demonstration extends BaseScreen {
 
         /* Setting up and creating the widget. */
         PieMenu.PieMenuStyle style = new PieMenu.PieMenuStyle();
-        style.circumferenceWidth = 1;
+        style.circumferenceWidth = 2;
         style.backgroundColor = backgroundColor;
         style.downColor = new Color(.5f, .5f, .5f, 1);
         style.sliceColor = new Color(.33f, .33f, .33f, 1);
@@ -310,7 +310,7 @@ public class Demonstration extends BaseScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 float alpha = MathUtils.map(0, permaPie.getAmountOfChildren() - 1, 0, 1, permaPie.getSelectedIndex());
-                radial.getStyle().backgroundColor.set(backgroundColor.r, backgroundColor.g, backgroundColor.b, alpha);
+                widget.getStyle().backgroundColor.set(backgroundColor.r, backgroundColor.g, backgroundColor.b, alpha);
             }
         });
 
@@ -335,12 +335,12 @@ public class Demonstration extends BaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             dragPie.addActor(new Label(Integer.toString(dragPieAmount++), game.skin));
             permaPie.addActor(new Label(Integer.toString(permaPieAmount++), game.skin));
-            radial.addActor(new Label(Integer.toString(radialAmount++), game.skin));
+            widget.addActor(new Label(Integer.toString(widgetAmount++), game.skin));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             dragPieAmount = 0;
             permaPieAmount = 0;
-            radialAmount = 0;
+            widgetAmount = 0;
             dispose();
             show();
         }
@@ -349,7 +349,7 @@ public class Demonstration extends BaseScreen {
                 return;
             dragPie.removeActor(dragPie.getChild(dragPie.getAmountOfChildren() - 1));
             permaPie.removeActor(permaPie.getChild(permaPie.getAmountOfChildren() - 1));
-            radial.removeActor(radial.getChild(radial.getAmountOfChildren() - 1));
+            widget.removeActor(widget.getChild(widget.getAmountOfChildren() - 1));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             permaPie.setVisible(!permaPie.isVisible());
